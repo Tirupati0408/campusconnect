@@ -1,4 +1,7 @@
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'https://gun2-txy8.onrender.com').replace(/\/$/, '')
+const configuredApiBase = (import.meta.env.VITE_API_BASE_URL || '').trim()
+const API_BASE = (configuredApiBase || 'https://campusconnect-1-lq2y.onrender.com')
+  .replace(/\.onrender\.comy(?=\/|$)/i, '.onrender.com')
+  .replace(/\/$/, '')
 
 async function request(path, options = {}) {
   let response
