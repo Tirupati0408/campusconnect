@@ -4,12 +4,14 @@ import os
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from postgrest import APIError
 from supabase import Client, create_client
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}}, send_wildcard=True)
 
 
 def get_supabase() -> Client:
