@@ -6,12 +6,14 @@ Flask JSON API backed by the Supabase tables shown in `database.png`: `events`, 
 
 1. Create and activate a virtual environment.
 2. Install dependencies with `pip install -r requirements.txt`.
-3. Set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` in `.env` (the existing local `.env` can be used).
+3. Copy `.env.example` to `.env` and set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` there.
 4. Start with `python app.py`. The API listens on port 5000 by default; set `PORT` to change it.
 
 ## Deploy to Render
 
-This folder includes `render.yaml` for a Render Blueprint and `.python-version` to select Python 3.13. Push this folder as the root of a Git repository, then in Render choose **New +** → **Blueprint** and connect that repository. If the backend is a subdirectory in a larger repository, put the Blueprint file at the repository root and set the service `rootDir` to `backend`. Render will install `requirements.txt`, start `gunicorn app:app`, and use `/` as its health check. Add `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` as service environment variables in Render; do not commit `.env`.
+This folder is ready to deploy as the root of its own Git repository. Upload the contents of `backend` (including `render.yaml` and `.python-version`) to GitHub, then in Render choose **New +** → **Blueprint** and connect that repository. Render installs `requirements.txt`, starts `gunicorn app:app`, and checks `/` for health. In the Render service environment, set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` using your Supabase project values. Do not upload `.env`; `.gitignore` excludes it. `.env.example` is a safe template for local setup.
+
+If you keep this folder inside a larger repository, configure Render's service `rootDir` as `backend` and point Render to `backend/render.yaml` as the Blueprint file.
 
 The Render service needs anonymous Supabase grants and RLS policies that allow the routes it uses. A successful Render deploy alone does not confirm database access.
 
