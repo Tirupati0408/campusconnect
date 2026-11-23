@@ -18,13 +18,19 @@ async function request(path, options = {}) {
   return data
 }
 
+async function requestList(path, options) {
+  const payload = await request(path, options)
+  if (Array.isArray(payload)) return payload
+  return Array.isArray(payload?.data) ? payload.data : []
+}
+
 export const apiBase = API_BASE
-export const getEvents = () => request('/api/events')
+export const getEvents = () => requestList('/api/events')
 export const getEvent = (id) => request(`/api/events/${encodeURIComponent(id)}`)
-export const getMyRegistrations = (userId) => request(`/api/me/registrations?user_id=${encodeURIComponent(userId)}`)
+export const getMyRegistrations = (userId) => requestList(`/api/me/registrations?user_id=${encodeURIComponent(userId)}`)
 export const registerForEvent = (userId, eventId) => request('/api/registrations', {
   method: 'POST', body: JSON.stringify({ user_id: userId, event_id: eventId }),
 })
-export const getEventRegistrations = (eventId, organizerId) => request(
+export const getEventRegistrations = (eventId, organizerId) => requestList(
   `/api/events/${encodeURIComponent(eventId)}/registrations?organizer_id=${encodeURIComponent(organizerId)}`,
 )
